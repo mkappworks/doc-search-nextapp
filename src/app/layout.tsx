@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Document Searching Next App",
-  description: "A Next.js app with Clerk authentication and Tailwind CSS",
+  title: "Document Searching",
+  description: "Document Searching using NextJS, Convex and Clerk",
 };
 
 export default function RootLayout({
