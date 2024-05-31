@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { HeaderActions } from "./header-actions";
+import { HeaderActions } from "@/components/header/header-actions";
 
 export function Header() {
   return (
