@@ -7,7 +7,7 @@ export function Header() {
   return (
     <div className="z-10 relative dark:bg-zinc-900 bg-zinc-200 py-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex gap-8 items-center">
+        <div className="flex gap-12 items-center">
           <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
             <Image
               src="/logo.svg"
@@ -18,6 +18,11 @@ export function Header() {
             />
             DocSearch
           </Link>
+          <nav>
+            <Link href="/" className="hover:text-slate-300">
+              Docs
+            </Link>
+          </nav>
         </div>
 
         <div className="flex gap-4 items-center">
