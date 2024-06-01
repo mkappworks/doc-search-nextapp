@@ -19,10 +19,12 @@ import { LoadingButton } from "@/components/button/loading-button";
 
 const formSchema = z.object({
   title: z.string().min(2).max(250),
+  file: z.instanceof(File),
 });
 
 export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
   const createDocument = useMutation(api.documents.createDocument);
+  const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,7 +37,19 @@ export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
   const { isSubmitting } = formState;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createDocument({ title: values.title });
+    const url = await generateUploadUrl();
+
+    const result = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": values.file.type },
+      body: values.file,
+    });
+
+    const { storageId } = await result.json();
+    await createDocument({
+      title: values.title,
+      storageId: storageId as string,
+    });
     onUpload();
   }
 
@@ -53,6 +67,28 @@ export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
                   disabled={isSubmitting}
                   placeholder="Please enter a title"
                   {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field: { value, onChange, ...fieldProps } }) => (
+            <FormItem>
+              <FormLabel>File</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept=".txt,.xml,.doc,.pdf"
+                  disabled={isSubmitting}
+                  {...fieldProps}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    onChange(file);
+                  }}
                 />
               </FormControl>
               <FormMessage />
