@@ -13,7 +13,7 @@ import {
 import { UploadDocForm } from "@/components/doc/upload-doc-form";
 import { useState } from "react";
 
-export function CreateDocButton() {
+export function UploadDocButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
