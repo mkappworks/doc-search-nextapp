@@ -24,6 +24,14 @@ export default function DocPage({
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold">{doc.title}</h1>
       </div>
+      <div className="flex gap-12">
+        <div className="bg-gray-900 p-4 rounded flex-1 h-[600px]">
+          {doc.docUrl && (
+            <iframe className="w-full h-full bg-gray-900" src={doc.docUrl} />
+          )}
+        </div>
+        <div className="w-[300px] bg-gray-900"></div>
+      </div>
     </main>
   );
 }

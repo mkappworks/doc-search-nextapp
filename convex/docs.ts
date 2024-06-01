@@ -28,14 +28,14 @@ export const getDoc = query({
     if (!doc) return null;
     if (doc.tokenIdentifier !== userId) return null;
 
-    return doc;
+    return { ...doc, docUrl: await ctx.storage.getUrl(doc.docId) };
   },
 });
 
 export const createDoc = mutation({
   args: {
     title: v.string(),
-    docId: v.string(),
+    docId: v.id("_storage"),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
