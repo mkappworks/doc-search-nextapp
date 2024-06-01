@@ -1,14 +1,14 @@
 import { mutation, query } from "@convex/_generated/server";
 import { ConvexError, v } from "convex/values";
 
-export const getDocuments = query({
+export const getDocs = query({
   async handler(ctx) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
 
     if (!userId) return [];
 
     return await ctx.db
-      .query("documents")
+      .query("docs")
       .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", userId))
       .collect();
   },
@@ -16,14 +16,14 @@ export const getDocuments = query({
 
 export const getDoc = query({
   args: {
-    storageId: v.id("documents"),
+    docId: v.id("docs"),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
 
     if (!userId) return null;
 
-    const doc = await ctx.db.get(args.storageId);
+    const doc = await ctx.db.get(args.docId);
 
     if (!doc) return null;
     if (doc.tokenIdentifier !== userId) return null;
@@ -32,20 +32,19 @@ export const getDoc = query({
   },
 });
 
-export const createDocument = mutation({
+export const createDoc = mutation({
   args: {
     title: v.string(),
-    storageId: v.string(),
+    docId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
-    console.log(userId);
 
     if (!userId) throw new ConvexError("Not authenticated");
 
-    await ctx.db.insert("documents", {
+    await ctx.db.insert("docs", {
       title: args.title,
-      storageId: args.storageId,
+      docId: args.docId,
       tokenIdentifier: userId,
     });
   },

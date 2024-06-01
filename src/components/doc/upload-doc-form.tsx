@@ -23,8 +23,8 @@ const formSchema = z.object({
 });
 
 export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
-  const createDocument = useMutation(api.documents.createDocument);
-  const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
+  const createDoc = useMutation(api.docs.createDoc);
+  const generateUploadUrl = useMutation(api.docs.generateUploadUrl);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,9 +46,9 @@ export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
     });
 
     const { storageId } = await result.json();
-    await createDocument({
+    await createDoc({
       title: values.title,
-      storageId: storageId as string,
+      docId: storageId as string,
     });
     onUpload();
   }

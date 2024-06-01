@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 
-export function DocCard({ document }: { document: Doc<"documents"> }) {
+export function DocCard({ doc }: { doc: Doc<"docs"> }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{document.title}</CardTitle>
+        <CardTitle>{doc.title}</CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
@@ -27,7 +27,7 @@ export function DocCard({ document }: { document: Doc<"documents"> }) {
           className="flex items-center gap-2"
           variant={"secondary"}
         >
-          <Link href={`/docs/${document._id}`}>
+          <Link href={`/docs/${doc._id}`}>
             <Eye className="w-4 h-4" /> View
           </Link>
         </Button>
