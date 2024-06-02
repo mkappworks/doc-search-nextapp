@@ -141,8 +141,6 @@ export const generateDocDescription = internalAction({
       docId: args.docId,
       description: aiResponse,
     });
-
-    return aiResponse;
   },
 });
 
