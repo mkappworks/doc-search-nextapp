@@ -2,6 +2,8 @@ import {
   MutationCtx,
   QueryCtx,
   action,
+  internalAction,
+  internalMutation,
   internalQuery,
   mutation,
   query,
@@ -57,33 +59,87 @@ export const getDoc = query({
   },
   async handler(ctx, args) {
     const accessObject = await hasAccessToDocument(ctx, args.docId);
-    if (!accessObject) return null;
+    if (!accessObject) return;
 
     const { doc } = accessObject;
 
-    return { ...doc, docUrl: await ctx.storage.getUrl(doc.docId) };
+    return { ...doc, docUrl: await ctx.storage.getUrl(doc.storageId) };
   },
 });
 
 export const createDoc = mutation({
   args: {
     title: v.string(),
-    docId: v.id("_storage"),
+    storageId: v.id("_storage"),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) throw new ConvexError("Not authenticated");
 
-    await ctx.db.insert("docs", {
+    const docId = await ctx.db.insert("docs", {
       title: args.title,
-      docId: args.docId,
+      storageId: args.storageId,
       tokenIdentifier: userId,
+    });
+
+    await ctx.scheduler.runAfter(0, internal.docs.generateDocDescription, {
+      docId,
+      storageId: args.storageId,
     });
   },
 });
 
 export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
+});
+
+export const generateDocDescription = internalAction({
+  args: {
+    docId: v.id("docs"),
+    storageId: v.id("_storage"),
+  },
+  async handler(ctx, args) {
+    const file = await ctx.storage.get(args.storageId);
+    if (!file) throw new ConvexError("File not found");
+
+    const text = await file.text();
+
+    const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
+      await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: `Here is a text: ${text}`,
+          },
+          {
+            role: "user",
+            content: `Please generate a 1 sentence description for this text`,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+      });
+
+    const aiResponse = chatCompletion.choices[0].message.content ?? "";
+
+    await ctx.runMutation(internal.docs.updateDocDescription, {
+      docId: args.docId,
+      description: aiResponse,
+    });
+
+    return aiResponse;
+  },
+});
+
+export const updateDocDescription = internalMutation({
+  args: {
+    docId: v.id("docs"),
+    description: v.string(),
+  },
+  async handler(ctx, args) {
+    await ctx.db.patch(args.docId, {
+      description: args.description,
+    });
+  },
 });
 
 export const askQuestion = action({
@@ -102,7 +158,7 @@ export const askQuestion = action({
       throw new ConvexError("You do not have access to this Doc");
 
     const { doc, userId } = accessObject;
-    const file = await ctx.storage.get(doc.docId);
+    const file = await ctx.storage.get(doc.storageId);
     if (!file) throw new ConvexError("File not found");
 
     const text = await file.text();

@@ -4,8 +4,9 @@ import { v } from "convex/values";
 export default defineSchema({
   docs: defineTable({
     title: v.string(),
+    description: v.optional(v.string()),
     tokenIdentifier: v.string(),
-    docId: v.id("_storage"),
+    storageId: v.id("_storage"),
   }).index("by_tokenIdentifier", ["tokenIdentifier"]),
   chats: defineTable({
     docId: v.id("docs"),

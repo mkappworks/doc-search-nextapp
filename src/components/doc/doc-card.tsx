@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Doc } from "@convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
+import { Eye, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export function DocCard({ doc }: { doc: Doc<"docs"> }) {
@@ -19,7 +19,15 @@ export function DocCard({ doc }: { doc: Doc<"docs"> }) {
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Card Content</p>
+        <div>
+          {!doc.description ? (
+            <div className="flex justify-center">
+              <Loader2 className="animate-spin" />
+            </div>
+          ) : (
+            doc.description
+          )}
+        </div>
       </CardContent>
       <CardFooter>
         <Button

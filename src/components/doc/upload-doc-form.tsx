@@ -49,7 +49,7 @@ export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
     const { storageId } = await result.json();
     await createDoc({
       title: values.title,
-      docId: storageId as Id<"_storage">,
+      storageId: storageId as Id<"_storage">,
     });
     onUpload();
   }
