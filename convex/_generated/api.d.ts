@@ -16,6 +16,7 @@ import type {
 } from "convex/server";
 import type * as chats from "../chats.js";
 import type * as docs from "../docs.js";
+import type * as notes from "../notes.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -28,6 +29,7 @@ import type * as docs from "../docs.js";
 declare const fullApi: ApiFromModules<{
   chats: typeof chats;
   docs: typeof docs;
+  notes: typeof notes;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

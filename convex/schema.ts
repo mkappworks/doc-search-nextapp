@@ -14,4 +14,8 @@ export default defineSchema({
     isHuman: v.boolean(),
     text: v.string(),
   }).index("by_docId_tokenIdentifier", ["docId", "tokenIdentifier"]),
+  notes: defineTable({
+    tokenIdentifier: v.string(),
+    text: v.string(),
+  }).index("by_tokenIdentifier", ["tokenIdentifier"]),
 });
