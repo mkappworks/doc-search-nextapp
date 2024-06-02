@@ -39,7 +39,6 @@ export default function Home() {
             src="/doc.svg"
             width="200"
             height="200"
-            className="dark:invert"
             alt="image of empty docs"
           />
           <h2 className="text-2xl">You have no docs</h2>
