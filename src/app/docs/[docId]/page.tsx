@@ -20,7 +20,7 @@ export default function DocPage({
   });
 
   return (
-    <main className="p-24 space-y-8 w-full">
+    <main className="w-full space-y-8 p-24">
       {!doc && (
         <div className="space-y-8">
           <div>
@@ -36,7 +36,7 @@ export default function DocPage({
 
       {doc && (
         <>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <h1 className="text-4xl font-bold">{doc.title}</h1>
             <DeleteDocButton docId={doc._id} />
           </div>
@@ -49,9 +49,9 @@ export default function DocPage({
               </TabsList>
 
               <TabsContent value="doc">
-                <div className="bg-gray-900 p-4 rounded-xl flex-1 h-[500px]">
+                <div className="h-[500px] flex-1 rounded-xl bg-gray-900 p-4">
                   {doc.docUrl && (
-                    <iframe className="w-full h-full" src={doc.docUrl} />
+                    <iframe className="h-full w-full" src={doc.docUrl} />
                   )}
                 </div>
               </TabsContent>

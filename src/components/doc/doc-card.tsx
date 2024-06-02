@@ -36,7 +36,7 @@ export function DocCard({ doc }: { doc: Doc<"docs"> }) {
           variant={"secondary"}
         >
           <Link href={`/docs/${doc._id}`}>
-            <Eye className="w-4 h-4" /> View
+            <Eye className="h-4 w-4" /> View
           </Link>
         </Button>
       </CardFooter>

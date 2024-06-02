@@ -20,7 +20,7 @@ const openai = new OpenAI({
 
 export async function hasAccessToDocument(
   ctx: MutationCtx | QueryCtx,
-  docId: Id<"docs">
+  docId: Id<"docs">,
 ) {
   const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
   if (!userId) return null;
@@ -166,7 +166,7 @@ export const askQuestion = action({
       internal.docs.hasAccessToDocumentQuery,
       {
         docId: args.docId,
-      }
+      },
     );
     if (!accessObject)
       throw new ConvexError("You do not have access to this Doc");

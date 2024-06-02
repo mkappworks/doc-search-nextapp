@@ -50,7 +50,7 @@ export function QuestionForm({ docId }: { docId: Id<"docs"> }) {
           control={form.control}
           name="question"
           render={({ field }) => (
-            <FormItem className="flex-1 ">
+            <FormItem className="flex-1">
               <FormControl>
                 <Input
                   disabled={isSubmitting}

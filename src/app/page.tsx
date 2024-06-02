@@ -12,8 +12,8 @@ export default function Home() {
   const docs = useQuery(api.docs.getDocs);
 
   return (
-    <main className="p-24 w-full space-y-8">
-      <div className="flex justify-between items-center">
+    <main className="w-full space-y-8 p-24">
+      <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">My Docs</h1>
         <UploadDocButton />
       </div>
@@ -22,19 +22,19 @@ export default function Home() {
           {new Array(8).fill("").map((_, i) => (
             <Card
               key={i}
-              className="h-[200px] p-6 flex flex-col justify-between"
+              className="flex h-[200px] flex-col justify-between p-6"
             >
               <Skeleton className="h-[20px] rounded" />
               <Skeleton className="h-[20px] rounded" />
               <Skeleton className="h-[20px] rounded" />
-              <Skeleton className="w-[80px] h-[40px] rounded" />
+              <Skeleton className="h-[40px] w-[80px] rounded" />
             </Card>
           ))}
         </div>
       )}
 
       {docs && docs.length === 0 && (
-        <div className="py-12 flex flex-col justify-center items-center gap-8">
+        <div className="flex flex-col items-center justify-center gap-8 py-12">
           <Image
             src="/doc.svg"
             width="200"

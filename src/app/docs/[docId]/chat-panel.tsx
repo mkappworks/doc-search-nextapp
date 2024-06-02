@@ -8,9 +8,9 @@ export function ChatPanel({ docId }: { docId: Id<"docs"> }) {
   const chats = useQuery(api.chats.getChatsForDocument, { docId });
 
   return (
-    <div className="dark:bg-gray-900 bg-slate-100 flex flex-col gap-2 p-6 rounded-xl">
-      <div className="h-[350px] overflow-y-auto space-y-3">
-        <div className="dark:bg-slate-950 rounded p-3">
+    <div className="flex flex-col gap-2 rounded-xl bg-slate-100 p-6 dark:bg-gray-900">
+      <div className="h-[350px] space-y-3 overflow-y-auto">
+        <div className="rounded p-3 dark:bg-slate-950">
           AI: Ask any question using AI about this document below:
         </div>
         {chats?.map((chat) => (
@@ -18,11 +18,11 @@ export function ChatPanel({ docId }: { docId: Id<"docs"> }) {
             key={chat._id}
             className={cn(
               {
-                "dark:bg-slate-800 bg-slate-200": chat.isHuman,
-                "dark:bg-slate-950 bg-slate-300": !chat.isHuman,
+                "bg-slate-200 dark:bg-slate-800": chat.isHuman,
+                "bg-slate-300 dark:bg-slate-950": !chat.isHuman,
                 "text-right": chat.isHuman,
               },
-              "rounded p-4 whitespace-pre-line"
+              "whitespace-pre-line rounded p-4",
             )}
           >
             {chat.isHuman ? "YOU" : "AI"}: {chat.text}
