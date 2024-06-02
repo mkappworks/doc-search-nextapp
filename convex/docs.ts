@@ -42,7 +42,7 @@ export const hasAccessToDocumentQuery = internalQuery({
 export const getDocs = query({
   async handler(ctx) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
-    if (!userId) return [];
+    if (!userId) return;
 
     return await ctx.db
       .query("docs")
