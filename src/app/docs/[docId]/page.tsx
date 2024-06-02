@@ -5,8 +5,8 @@ import { useQuery } from "convex/react";
 import { Id } from "@convex/_generated/dataModel";
 import { ChatPanel } from "./chat-panel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DeleteDocButton } from "./delete-doc-button";
 
 export default function DocPage({
   params,
@@ -38,8 +38,7 @@ export default function DocPage({
         <>
           <div className="flex justify-between items-center">
             <h1 className="text-4xl font-bold">{doc.title}</h1>
-
-            <Button>Delete</Button>
+            <DeleteDocButton docId={doc._id} />
           </div>
 
           <div className="flex gap-12">

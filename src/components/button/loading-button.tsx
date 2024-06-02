@@ -5,14 +5,17 @@ export function LoadingButton({
   isLoading,
   loadingText,
   children,
+  onClick,
 }: {
   isLoading: boolean;
   loadingText: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <Button
       className="flex gap-1 items-center"
+      onClick={onClick}
       disabled={isLoading}
       type="submit"
     >
