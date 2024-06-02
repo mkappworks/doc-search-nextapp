@@ -89,6 +89,22 @@ export const createDoc = mutation({
   },
 });
 
+export const deleteDoc = mutation({
+  args: {
+    docId: v.id("docs"),
+  },
+  async handler(ctx, args) {
+    const accessObject = await hasAccessToDocument(ctx, args.docId);
+    if (!accessObject)
+      throw new ConvexError("You do not have access to this Doc");
+
+    const { doc } = accessObject;
+
+    await ctx.storage.delete(doc.storageId);
+    await ctx.db.delete(doc._id);
+  },
+});
+
 export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
