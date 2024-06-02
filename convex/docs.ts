@@ -120,26 +120,26 @@ export const generateDocDescription = internalAction({
 
     const text = await file.text();
 
-    const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
-      await openai.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: `Here is a text: ${text}`,
-          },
-          {
-            role: "user",
-            content: `Please generate a 1 sentence description for this text`,
-          },
-        ],
-        model: "gpt-3.5-turbo",
-      });
+    // const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
+    //   await openai.chat.completions.create({
+    //     messages: [
+    //       {
+    //         role: "system",
+    //         content: `Here is a text: ${text}`,
+    //       },
+    //       {
+    //         role: "user",
+    //         content: `Please generate a 1 sentence description for this text`,
+    //       },
+    //     ],
+    //     model: "gpt-3.5-turbo",
+    //   });
 
-    const aiResponse = chatCompletion.choices[0].message.content ?? "";
+    // const aiResponse = chatCompletion.choices[0].message.content ?? "";
 
     await ctx.runMutation(internal.docs.updateDocDescription, {
       docId: args.docId,
-      description: aiResponse,
+      description: "aiResponse",
     });
   },
 });
