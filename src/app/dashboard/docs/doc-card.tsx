@@ -35,7 +35,7 @@ export function DocCard({ doc }: { doc: Doc<"docs"> }) {
           className="flex items-center gap-2"
           variant={"secondary"}
         >
-          <Link href={`/docs/${doc._id}`}>
+          <Link href={`/dashboard/docs/${doc._id}`}>
             <Eye className="h-4 w-4" /> View
           </Link>
         </Button>

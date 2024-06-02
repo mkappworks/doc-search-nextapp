@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { UploadDocForm } from "@/components/doc/upload-doc-form";
+import { UploadDocForm } from "@/app/dashboard/docs/upload-doc-form";
 import { useState } from "react";
 import { Upload } from "lucide-react";
 import { btnIconStyles, btnStyles } from "@/styles";

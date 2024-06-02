@@ -50,7 +50,7 @@ export function DeleteDocButton({ docId }: { docId: Id<"docs"> }) {
               setIsLoading(true);
               deleteDoc({ docId })
                 .then(() => {
-                  router.push("/");
+                  router.push("/dashboard/docs");
                 })
                 .finally(() => {
                   setIsLoading(false);
