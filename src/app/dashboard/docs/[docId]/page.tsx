@@ -21,7 +21,7 @@ export default function DocPage({
   });
 
   return (
-    <main className="w-full space-y-8 p-24">
+    <main className="w-full space-y-8 ">
       {!doc && (
         <div className="space-y-8">
           <div>
