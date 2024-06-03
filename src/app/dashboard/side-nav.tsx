@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ClipboardPen, CogIcon, FilesIcon } from "lucide-react";
+import { ClipboardPen, CogIcon, FilesIcon, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,18 @@ export function SideNav() {
   return (
     <nav>
       <ul className="space-y-6">
+        <li>
+          <Link
+            className={cn(
+              "flex items-center gap-2 text-xl font-light hover:text-cyan-200",
+              { "font-bold text-cyan-400": pathName.endsWith("/search") },
+            )}
+            href="/dashboard/search"
+          >
+            <Search />
+            Search
+          </Link>
+        </li>
         <li>
           <Link
             className={cn(
