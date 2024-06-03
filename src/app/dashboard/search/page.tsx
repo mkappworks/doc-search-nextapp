@@ -37,21 +37,25 @@ export default function SearchPage() {
             return (
               <SearchResult
                 key={result.record._id}
-                type="note"
                 url={`/dashboard/notes/${result.record._id}`}
                 score={result.score}
                 text={result.record.text}
-              />
+              >
+                <NotebookPen className="w-5 h-5" />
+                Note
+              </SearchResult>
             );
           } else {
             return (
               <SearchResult
                 key={result.record._id}
-                type="document"
                 url={`/dashboard/docs/${result.record._id}`}
                 score={result.score}
                 text={result.record.title + ": " + result.record.description}
-              />
+              >
+                <FileIcon className="w-5 h-5" />
+                Doc
+              </SearchResult>
             );
           }
         })}
@@ -63,26 +67,19 @@ export default function SearchPage() {
 function SearchResult({
   url,
   score,
-  type,
   text,
+  children,
 }: {
-  type: string;
   url: string;
   score: number;
   text: string;
+  children: React.ReactNode;
 }) {
   return (
     <Link href={url}>
       <li className="space-y-4 dark:hover:bg-slate-700 dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 rounded p-4 whitespace-pre-line">
         <div className="flex justify-between gap-2 text-xl items-center">
-          <div className="flex gap-2 items-center">
-            {type === "note" ? (
-              <NotebookPen className="w-5 h-5" />
-            ) : (
-              <FileIcon className="w-5 h-5" />
-            )}
-            {type === "note" ? "Note" : "Document"}
-          </div>
+          <div className="flex gap-2 items-center">{children}</div>
           <div className="text-sm">Relevancy of {score.toFixed(2)}</div>
         </div>
         <div>{text.substring(0, 500) + "..."}</div>
