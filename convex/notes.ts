@@ -14,6 +14,22 @@ export const getNotes = query({
   },
 });
 
+export const getNote = query({
+  args: {
+    noteId: v.id("notes"),
+  },
+  async handler(ctx, args) {
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    if (!userId) return;
+
+    const note = await ctx.db.get(args.noteId);
+    if (!note) return;
+    if (note.tokenIdentifier !== userId) return;
+
+    return note;
+  },
+});
+
 export const createNote = mutation({
   args: {
     text: v.string(),
@@ -26,5 +42,21 @@ export const createNote = mutation({
       text: args.text,
       tokenIdentifier: userId,
     });
+  },
+});
+
+export const deleteNote = mutation({
+  args: {
+    noteId: v.id("notes"),
+  },
+  async handler(ctx, args) {
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    if (!userId) return;
+
+    const note = await ctx.db.get(args.noteId);
+    if (!note) return;
+    if (note.tokenIdentifier !== userId) return;
+
+    await ctx.db.delete(note._id);
   },
 });
