@@ -7,7 +7,14 @@ export default defineSchema({
     description: v.optional(v.string()),
     tokenIdentifier: v.string(),
     storageId: v.id("_storage"),
-  }).index("by_tokenIdentifier", ["tokenIdentifier"]),
+    embedding: v.optional(v.array(v.float64())),
+  })
+    .index("by_tokenIdentifier", ["tokenIdentifier"])
+    .vectorIndex("by_embedding", {
+      vectorField: "embedding",
+      dimensions: 1536,
+      filterFields: ["tokenIdentifier"],
+    }),
   chats: defineTable({
     docId: v.id("docs"),
     tokenIdentifier: v.string(),

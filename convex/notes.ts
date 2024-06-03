@@ -105,7 +105,7 @@ export const deleteNote = mutation({
   },
 });
 
-async function embed(text: string) {
+export async function embed(text: string) {
   const embedding = await openai.embeddings.create({
     model: "text-embedding-3-small",
     input: text,

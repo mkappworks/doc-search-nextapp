@@ -13,6 +13,7 @@ import { ConvexError, v } from "convex/values";
 import OpenAI from "openai";
 
 import { Id } from "./_generated/dataModel";
+import { embed } from "./notes";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
@@ -120,26 +121,29 @@ export const generateDocDescription = internalAction({
 
     const text = await file.text();
 
-    // const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
-    //   await openai.chat.completions.create({
-    //     messages: [
-    //       {
-    //         role: "system",
-    //         content: `Here is a text: ${text}`,
-    //       },
-    //       {
-    //         role: "user",
-    //         content: `Please generate a 1 sentence description for this text`,
-    //       },
-    //     ],
-    //     model: "gpt-3.5-turbo",
-    //   });
+    const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
+      await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: `Here is a text: ${text}`,
+          },
+          {
+            role: "user",
+            content: `Please generate a 1 sentence description for this text`,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+      });
 
-    // const aiResponse = chatCompletion.choices[0].message.content ?? "";
+    const aiResponse = chatCompletion.choices[0].message.content ?? "";
+
+    const embedding = await embed(aiResponse);
 
     await ctx.runMutation(internal.docs.updateDocDescription, {
       docId: args.docId,
-      description: "aiResponse",
+      description: aiResponse,
+      embedding,
     });
   },
 });
@@ -148,10 +152,12 @@ export const updateDocDescription = internalMutation({
   args: {
     docId: v.id("docs"),
     description: v.string(),
+    embedding: v.array(v.float64()),
   },
   async handler(ctx, args) {
     await ctx.db.patch(args.docId, {
       description: args.description,
+      embedding: args.embedding,
     });
   },
 });
