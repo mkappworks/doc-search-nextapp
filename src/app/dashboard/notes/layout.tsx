@@ -1,14 +1,17 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { CreateNoteButton } from "./create-note-button";
-import { api } from "@convex/_generated/api";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
-import { Id } from "@convex/_generated/dataModel";
-import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@convex/_generated/api";
+import { Id } from "@convex/_generated/dataModel";
+import { useQuery } from "convex/react";
+
+import { cn } from "@/lib/utils";
+
+import { CreateNoteButton } from "./create-note-button";
 
 export default function NotesLayout({
   children,

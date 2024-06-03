@@ -1,7 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
+import { LoadingButton } from "@/components/button/loading-button";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -12,15 +14,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { btnIconStyles, btnStyles } from "@/styles";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { LoadingButton } from "@/components/button/loading-button";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Trash } from "lucide-react";
 
 export function DeleteDocButton({ docId }: { docId: Id<"docs"> }) {
   const [isLoading, setIsLoading] = useState(false);

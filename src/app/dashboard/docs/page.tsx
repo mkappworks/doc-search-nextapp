@@ -1,12 +1,14 @@
 "use client";
 
-import { UploadDocButton } from "@/app/dashboard/docs/upload-doc-button";
-import { DocCard } from "@/app/dashboard/docs/doc-card";
+import Image from "next/image";
+
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card } from "@/components/ui/card";
-import Image from "next/image";
+
+import { DocCard } from "@/app/dashboard/docs/doc-card";
+import { UploadDocButton } from "@/app/dashboard/docs/upload-doc-button";
 
 export default function DocsPage() {
   const docs = useQuery(api.docs.getDocs);

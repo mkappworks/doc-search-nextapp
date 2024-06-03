@@ -1,9 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { useParams } from "next/navigation";
+
 import { DeleteNoteButton } from "./delete-note-button";
 
 export default function NotePage() {

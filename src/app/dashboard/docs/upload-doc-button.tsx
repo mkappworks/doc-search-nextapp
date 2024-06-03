@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,10 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { UploadDocForm } from "@/app/dashboard/docs/upload-doc-form";
-import { useState } from "react";
-import { Upload } from "lucide-react";
 import { btnIconStyles, btnStyles } from "@/styles";
+import { Upload } from "lucide-react";
+
+import { UploadDocForm } from "@/app/dashboard/docs/upload-doc-form";
 
 export function UploadDocButton() {
   const [isOpen, setIsOpen] = useState(false);

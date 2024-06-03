@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { LoadingButton } from "@/components/button/loading-button";
 import {
   AlertDialog,
@@ -15,11 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
-
 import { useMutation } from "convex/react";
 import { Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export function DeleteNoteButton({ noteId }: { noteId: Id<"notes"> }) {
   const [isLoading, setIsLoading] = useState(false);

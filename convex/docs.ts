@@ -1,17 +1,17 @@
+import { api, internal } from "@convex/_generated/api";
 import {
-  MutationCtx,
-  QueryCtx,
   action,
   internalAction,
   internalMutation,
   internalQuery,
   mutation,
+  MutationCtx,
   query,
+  QueryCtx,
 } from "@convex/_generated/server";
 import { ConvexError, v } from "convex/values";
-import { api, internal } from "@convex/_generated/api";
-
 import OpenAI from "openai";
+
 import { Id } from "./_generated/dataModel";
 
 const openai = new OpenAI({

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { SideNav } from "./side-nav";
 
 export const metadata: Metadata = {

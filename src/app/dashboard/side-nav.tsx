@@ -1,8 +1,11 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { ClipboardPen, CogIcon, FilesIcon } from "lucide-react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { ClipboardPen, CogIcon, FilesIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 export function SideNav() {
   const pathName = usePathname();

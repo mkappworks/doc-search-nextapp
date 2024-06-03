@@ -1,7 +1,9 @@
-import { cn } from "@/lib/utils";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
+
+import { cn } from "@/lib/utils";
+
 import { QuestionForm } from "./question-form";
 
 export function ChatPanel({ docId }: { docId: Id<"docs"> }) {

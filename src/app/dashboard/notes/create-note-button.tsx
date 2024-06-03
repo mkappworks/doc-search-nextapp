@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,11 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
-import { PlusCircleIcon } from "lucide-react";
-import { btnIconStyles, btnStyles } from "@/styles";
-import { CreateNoteForm } from "./create-note-form";
 import { useToast } from "@/components/ui/use-toast";
+import { btnIconStyles, btnStyles } from "@/styles";
+import { PlusCircleIcon } from "lucide-react";
+
+import { CreateNoteForm } from "./create-note-form";
 
 export function CreateNoteButton() {
   const [isOpen, setIsOpen] = useState(false);

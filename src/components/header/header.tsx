@@ -1,7 +1,8 @@
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { HeaderActions } from "@/components/header/header-actions";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import { HeaderActions } from "@/components/header/header-actions";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 export function Header() {
   return (

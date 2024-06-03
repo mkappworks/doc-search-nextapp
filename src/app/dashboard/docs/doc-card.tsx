@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,9 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Doc } from "@convex/_generated/dataModel";
-import { Button } from "@/components/ui/button";
 import { Eye, Loader2 } from "lucide-react";
-import Link from "next/link";
 
 export function DocCard({ doc }: { doc: Doc<"docs"> }) {
   return (
