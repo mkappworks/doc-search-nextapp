@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  note: z.string().min(1).max(2500),
+  note: z.string().min(1).max(5000),
 });
 
 export function CreateNoteForm({ onCreate }: { onCreate: () => void }) {

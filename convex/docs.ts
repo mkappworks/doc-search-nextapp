@@ -1,4 +1,4 @@
-import { api, internal } from "@convex/_generated/api";
+import { internal } from "@convex/_generated/api";
 import {
   action,
   internalAction,
