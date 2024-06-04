@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
 
@@ -11,7 +12,10 @@ import { DocCard } from "@/app/dashboard/docs/doc-card";
 import { UploadDocButton } from "@/app/dashboard/docs/upload-doc-button";
 
 export default function DocsPage() {
-  const docs = useQuery(api.docs.getDocs);
+  const { organization } = useOrganization();
+  const docs = useQuery(api.docs.getDocs, {
+    orgId: organization?.id,
+  });
 
   return (
     <main className="w-full space-y-8">

@@ -43,9 +43,19 @@ export const hasAccessToDocumentQuery = internalQuery({
 });
 
 export const getDocs = query({
-  async handler(ctx) {
+  args: {
+    orgId: v.optional(v.string()),
+  },
+  async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
+
+    if (args.orgId) {
+      return await ctx.db
+        .query("docs")
+        .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
+        .collect();
+    }
 
     return await ctx.db
       .query("docs")
