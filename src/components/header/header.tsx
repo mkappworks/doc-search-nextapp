@@ -22,6 +22,7 @@ export function Header() {
           </Link>
           <nav className="flex items-center gap-8">
             <OrganizationSwitcher />
+            {/* //TODO: if not signed in, remove the link */}
             <Link href="/dashboard" className="hover:text-slate-300">
               Docs
             </Link>
