@@ -30,6 +30,13 @@ http.route({
             orgId: result.data.organization.id,
           });
           break;
+        case "user.created":
+          await ctx.runMutation(internal.memberships.addUserIdToOrg, {
+            userId: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
+            orgId: `personal`,
+          });
+          break;
+        //TODO: Add a case for user invitation user.deleted
         case "organizationMembership.updated":
         case "organizationMembership.deleted":
           await ctx.runMutation(internal.memberships.removeUserIdFromOrg, {
