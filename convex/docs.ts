@@ -13,22 +13,27 @@ import { ConvexError, v } from "convex/values";
 import OpenAI from "openai";
 
 import { Id } from "./_generated/dataModel";
+import { hasMembership } from "./memberships";
 import { embed } from "./notes";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
 });
 
-export async function hasAccessToDocument(
+async function hasAccessToDocument(
   ctx: MutationCtx | QueryCtx,
   docId: Id<"docs">,
+  orgId?: string,
 ) {
   const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
   if (!userId) return null;
 
+  const membership = await hasMembership(ctx, userId, orgId);
+  if (!membership) return;
+
   const doc = await ctx.db.get(docId);
   if (!doc) return null;
-  if (doc.tokenIdentifier !== userId) return null;
+  if (doc.membershipId !== membership._id) return null;
 
   return { doc, userId };
 }
@@ -36,9 +41,10 @@ export async function hasAccessToDocument(
 export const hasAccessToDocumentQuery = internalQuery({
   args: {
     docId: v.id("docs"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
-    return await hasAccessToDocument(ctx, args.docId);
+    return await hasAccessToDocument(ctx, args.docId, args.orgId);
   },
 });
 
@@ -50,16 +56,12 @@ export const getDocs = query({
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
 
-    if (args.orgId) {
-      return await ctx.db
-        .query("docs")
-        .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
-        .collect();
-    }
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
 
     return await ctx.db
       .query("docs")
-      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", userId))
+      .withIndex("by_membershipId", (q) => q.eq("membershipId", membership._id))
       .collect();
   },
 });
@@ -82,15 +84,19 @@ export const createDoc = mutation({
   args: {
     title: v.string(),
     storageId: v.id("_storage"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) throw new ConvexError("Not authenticated");
 
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
+
     const docId = await ctx.db.insert("docs", {
       title: args.title,
       storageId: args.storageId,
-      tokenIdentifier: userId,
+      membershipId: membership._id,
     });
 
     await ctx.scheduler.runAfter(0, internal.docs.generateDocDescription, {
@@ -176,12 +182,14 @@ export const askQuestion = action({
   args: {
     question: v.string(),
     docId: v.id("docs"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const accessObject = await ctx.runQuery(
       internal.docs.hasAccessToDocumentQuery,
       {
         docId: args.docId,
+        orgId: args.orgId,
       },
     );
     if (!accessObject)

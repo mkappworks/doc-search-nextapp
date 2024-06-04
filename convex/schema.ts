@@ -9,17 +9,15 @@ export default defineSchema({
   docs: defineTable({
     title: v.string(),
     description: v.optional(v.string()),
-    tokenIdentifier: v.optional(v.string()),
-    orgId: v.optional(v.string()),
+    membershipId: v.id("memberships"),
     storageId: v.id("_storage"),
     embedding: v.optional(v.array(v.float64())),
   })
-    .index("by_tokenIdentifier", ["tokenIdentifier"])
-    .index("by_orgId", ["orgId"])
+    .index("by_membershipId", ["membershipId"])
     .vectorIndex("by_embedding", {
       vectorField: "embedding",
       dimensions: 1536,
-      filterFields: ["tokenIdentifier"],
+      filterFields: ["membershipId"],
     }),
   chats: defineTable({
     docId: v.id("docs"),
@@ -28,14 +26,14 @@ export default defineSchema({
     text: v.string(),
   }).index("by_docId_tokenIdentifier", ["docId", "tokenIdentifier"]),
   notes: defineTable({
-    tokenIdentifier: v.string(),
+    membershipId: v.id("memberships"),
     text: v.string(),
     embedding: v.optional(v.array(v.float64())),
   })
-    .index("by_tokenIdentifier", ["tokenIdentifier"])
+    .index("by_membershipId", ["membershipId"])
     .vectorIndex("by_embedding", {
       vectorField: "embedding",
       dimensions: 1536,
-      filterFields: ["tokenIdentifier"],
+      filterFields: ["membershipId"],
     }),
 });

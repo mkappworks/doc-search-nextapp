@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 
-import { internalMutation } from "./_generated/server";
+import { internalMutation, QueryCtx } from "./_generated/server";
 
 export const addUserIdToOrg = internalMutation({
   args: {
@@ -33,3 +33,18 @@ export const removeUserIdFromOrg = internalMutation({
     }
   },
 });
+
+export async function hasMembership(
+  ctx: QueryCtx,
+  userId: string,
+  organizationId?: string,
+) {
+  const orgId = organizationId ?? "personal";
+
+  return await ctx.db
+    .query("memberships")
+    .withIndex("by_orgId_userId", (q) =>
+      q.eq("orgId", orgId).eq("userId", userId),
+    )
+    .first();
+}

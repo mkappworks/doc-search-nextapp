@@ -8,19 +8,27 @@ import { ConvexError, v } from "convex/values";
 import OpenAI from "openai";
 
 import { internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
+import { hasMembership } from "./memberships";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
 });
 
 export const getNotes = query({
-  async handler(ctx) {
+  args: {
+    orgId: v.optional(v.string()),
+  },
+  async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
 
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
+
     return await ctx.db
       .query("notes")
-      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", userId))
+      .withIndex("by_membershipId", (q) => q.eq("membershipId", membership._id))
       .order("desc")
       .collect();
   },
@@ -29,14 +37,19 @@ export const getNotes = query({
 export const getNote = query({
   args: {
     noteId: v.id("notes"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
 
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
+
     const note = await ctx.db.get(args.noteId);
     if (!note) return;
-    if (note.tokenIdentifier !== userId) return;
+
+    if (note.membershipId !== membership._id) return;
 
     return note;
   },
@@ -72,14 +85,19 @@ export const createNoteEmbedding = internalAction({
 export const createNote = mutation({
   args: {
     text: v.string(),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) throw new ConvexError("Not authenticated");
 
-    const noteId = await ctx.db.insert("notes", {
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
+
+    let noteId: Id<"notes"> = await ctx.db.insert("notes", {
       text: args.text,
-      tokenIdentifier: userId,
+
+      membershipId: membership._id,
     });
 
     await ctx.scheduler.runAfter(0, internal.notes.createNoteEmbedding, {
@@ -92,14 +110,18 @@ export const createNote = mutation({
 export const deleteNote = mutation({
   args: {
     noteId: v.id("notes"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
 
+    const membership = await hasMembership(ctx, userId, args.orgId);
+    if (!membership) return;
+
     const note = await ctx.db.get(args.noteId);
     if (!note) return;
-    if (note.tokenIdentifier !== userId) return;
+    if (note.membershipId !== membership._id) return;
 
     await ctx.db.delete(note._id);
   },
