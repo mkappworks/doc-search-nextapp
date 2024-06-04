@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 
-import { internalMutation, QueryCtx } from "./_generated/server";
+import { internalMutation, internalQuery, QueryCtx } from "./_generated/server";
 
 export const addUserIdToOrg = internalMutation({
   args: {
@@ -48,3 +48,13 @@ export async function hasMembership(
     )
     .first();
 }
+
+export const getMembership = internalQuery({
+  args: {
+    orgId: v.optional(v.string()),
+    userId: v.string(),
+  },
+  async handler(ctx, args) {
+    return await hasMembership(ctx, args.userId, args.orgId);
+  },
+});

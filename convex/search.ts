@@ -1,20 +1,28 @@
 import { action } from "@convex/_generated/server";
 import { v } from "convex/values";
 
-import { api } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import { Doc } from "./_generated/dataModel";
 import { embed } from "./notes";
 
 export const searchAction = action({
   args: {
     search: v.string(),
+    orgId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) return;
+
+    const membership = await ctx.runQuery(internal.memberships.getMembership, {
+      orgId: args.orgId,
+      userId: userId,
+    });
+    if (!membership) return;
+
     const embedding = await embed(args.search);
 
-    const filter = (q: any) => q.eq("tokenIdentifier", userId);
+    const filter = (q: any) => q.eq("membershipId", membership._id);
 
     const noteResults = await ctx.vectorSearch("notes", "by_embedding", {
       vector: embedding,
@@ -43,6 +51,7 @@ export const searchAction = action({
       filteredNotesResults.map(async (result) => {
         const note = await ctx.runQuery(api.notes.getNote, {
           noteId: result._id,
+          orgId: args.orgId,
         });
         if (!note) return;
 
@@ -58,6 +67,7 @@ export const searchAction = action({
       filteredDocsResults.map(async (result) => {
         const doc = await ctx.runQuery(api.docs.getDoc, {
           docId: result._id,
+          orgId: args.orgId,
         });
         if (!doc) return;
 

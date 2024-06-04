@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "convex/react";
@@ -24,6 +25,7 @@ export function SearchForm({
 }: {
   setResults: (notes: typeof api.search.searchAction._returnType) => void;
 }) {
+  const { organization } = useOrganization();
   const searchAction = useAction(api.search.searchAction);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,6 +41,7 @@ export function SearchForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await searchAction({
       search: values.search,
+      orgId: organization?.id,
     }).then(setResults);
     form.reset();
   }

@@ -69,9 +69,10 @@ export const getDocs = query({
 export const getDoc = query({
   args: {
     docId: v.id("docs"),
+    orgId: v.optional(v.string()),
   },
   async handler(ctx, args) {
-    const accessObject = await hasAccessToDocument(ctx, args.docId);
+    const accessObject = await hasAccessToDocument(ctx, args.docId, args.orgId);
     if (!accessObject) return;
 
     const { doc } = accessObject;

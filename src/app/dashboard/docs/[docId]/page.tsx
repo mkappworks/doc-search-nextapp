@@ -2,6 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
@@ -16,8 +17,10 @@ export default function DocPage({
     docId: Id<"docs">;
   };
 }) {
+  const { organization } = useOrganization();
   const doc = useQuery(api.docs.getDoc, {
     docId: params.docId,
+    orgId: organization?.id,
   });
 
   return (
