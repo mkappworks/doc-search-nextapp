@@ -19,7 +19,7 @@ export default function DocsPage() {
 
   return (
     <main className="w-full space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="items-center justify-between flex">
         <h1 className="text-4xl font-bold">My Docs</h1>
         <UploadDocButton />
       </div>

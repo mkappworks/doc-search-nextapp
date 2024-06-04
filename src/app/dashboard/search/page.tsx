@@ -20,7 +20,7 @@ export default function SearchPage() {
 
   return (
     <main className="w-full space-y-8 pb-44">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Search</h1>
       </div>
 
@@ -41,7 +41,7 @@ export default function SearchPage() {
                 score={result.score}
                 text={result.record.text}
               >
-                <NotebookPen className="w-5 h-5" />
+                <NotebookPen className="h-5 w-5" />
                 Note
               </SearchResult>
             );
@@ -53,7 +53,7 @@ export default function SearchPage() {
                 score={result.score}
                 text={result.record.title + ": " + result.record.description}
               >
-                <FileIcon className="w-5 h-5" />
+                <FileIcon className="h-5 w-5" />
                 Doc
               </SearchResult>
             );
@@ -77,9 +77,9 @@ function SearchResult({
 }) {
   return (
     <Link href={url}>
-      <li className="space-y-4 dark:hover:bg-slate-700 dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 rounded p-4 whitespace-pre-line">
-        <div className="flex justify-between gap-2 text-xl items-center">
-          <div className="flex gap-2 items-center">{children}</div>
+      <li className="space-y-4 whitespace-pre-line rounded bg-slate-200 p-4 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+        <div className="flex items-center justify-between gap-2 text-xl">
+          <div className="flex items-center gap-2">{children}</div>
           <div className="text-sm">Relevancy of {score.toFixed(2)}</div>
         </div>
         <div>{text.substring(0, 500) + "..."}</div>
