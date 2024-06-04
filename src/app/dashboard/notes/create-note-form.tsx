@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
@@ -21,6 +22,7 @@ const formSchema = z.object({
 });
 
 export function CreateNoteForm({ onCreate }: { onCreate: () => void }) {
+  const { organization } = useOrganization();
   const createNote = useMutation(api.notes.createNote);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,7 +35,7 @@ export function CreateNoteForm({ onCreate }: { onCreate: () => void }) {
   const { isSubmitting } = formState;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createNote({ text: values.note });
+    await createNote({ text: values.note, orgId: organization?.id });
     onCreate();
   }
 

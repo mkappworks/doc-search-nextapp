@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
@@ -18,7 +19,10 @@ export default function NotesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const notes = useQuery(api.notes.getNotes);
+  const { organization } = useOrganization();
+  const notes = useQuery(api.notes.getNotes, {
+    orgId: organization?.id,
+  });
   const { noteId } = useParams<{ noteId: Id<"notes"> }>();
 
   return (

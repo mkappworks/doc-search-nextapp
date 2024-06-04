@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +23,7 @@ const formSchema = z.object({
 });
 
 export function QuestionForm({ docId }: { docId: Id<"docs"> }) {
+  const { organization } = useOrganization();
   const askQuestion = useAction(api.docs.askQuestion);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,7 +37,11 @@ export function QuestionForm({ docId }: { docId: Id<"docs"> }) {
   const { isSubmitting } = formState;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await askQuestion({ question: values.question, docId });
+    await askQuestion({
+      question: values.question,
+      docId,
+      orgId: organization?.id,
+    });
     form.reset();
   }
 
