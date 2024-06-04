@@ -17,7 +17,7 @@ const openai = new OpenAI({
 
 export const getNotes = query({
   args: {
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -37,7 +37,7 @@ export const getNotes = query({
 export const getNote = query({
   args: {
     noteId: v.id("notes"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -85,7 +85,7 @@ export const createNoteEmbedding = internalAction({
 export const createNote = mutation({
   args: {
     text: v.string(),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -110,7 +110,7 @@ export const createNote = mutation({
 export const deleteNote = mutation({
   args: {
     noteId: v.id("notes"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;

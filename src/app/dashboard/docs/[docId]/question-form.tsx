@@ -40,7 +40,7 @@ export function QuestionForm({ docId }: { docId: Id<"docs"> }) {
     await askQuestion({
       question: values.question,
       docId,
-      orgId: organization?.id,
+      orgId: organization?.id ?? "personal",
     });
     form.reset();
   }

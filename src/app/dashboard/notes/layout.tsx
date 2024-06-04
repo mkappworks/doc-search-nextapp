@@ -21,7 +21,7 @@ export default function NotesLayout({
 }) {
   const { organization } = useOrganization();
   const notes = useQuery(api.notes.getNotes, {
-    orgId: organization?.id,
+    orgId: organization?.id ?? "personal",
   });
   const { noteId } = useParams<{ noteId: Id<"notes"> }>();
 

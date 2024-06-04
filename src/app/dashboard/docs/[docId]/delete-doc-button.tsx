@@ -16,12 +16,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { btnIconStyles, btnStyles } from "@/styles";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { Trash } from "lucide-react";
 
 export function DeleteDocButton({ docId }: { docId: Id<"docs"> }) {
+  const { organization } = useOrganization();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -47,7 +49,7 @@ export function DeleteDocButton({ docId }: { docId: Id<"docs"> }) {
           <LoadingButton
             onClick={() => {
               setIsLoading(true);
-              deleteDoc({ docId })
+              deleteDoc({ docId, orgId: organization?.id ?? "personal" })
                 .then(() => {
                   router.push("/dashboard/docs");
                 })

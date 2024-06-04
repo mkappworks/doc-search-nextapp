@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useOrganization } from "@clerk/nextjs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +24,7 @@ const formSchema = z.object({
 });
 
 export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
+  const { organization } = useOrganization();
   const createDoc = useMutation(api.docs.createDoc);
   const generateUploadUrl = useMutation(api.docs.generateUploadUrl);
 
@@ -49,6 +51,7 @@ export function UploadDocForm({ onUpload }: { onUpload: () => void }) {
     await createDoc({
       title: values.title,
       storageId: storageId as Id<"_storage">,
+      orgId: organization?.id ?? "personal",
     });
     onUpload();
   }

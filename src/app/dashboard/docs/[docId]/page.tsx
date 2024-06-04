@@ -20,7 +20,7 @@ export default function DocPage({
   const { organization } = useOrganization();
   const doc = useQuery(api.docs.getDoc, {
     docId: params.docId,
-    orgId: organization?.id,
+    orgId: organization?.id ?? "personal",
   });
 
   return (

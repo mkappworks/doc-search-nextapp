@@ -37,10 +37,8 @@ export const removeUserIdFromOrg = internalMutation({
 export async function hasMembership(
   ctx: QueryCtx,
   userId: string,
-  organizationId?: string,
+  orgId: string,
 ) {
-  const orgId = organizationId ?? "personal";
-
   return await ctx.db
     .query("memberships")
     .withIndex("by_orgId_userId", (q) =>
@@ -51,7 +49,7 @@ export async function hasMembership(
 
 export const getMembership = internalQuery({
   args: {
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
     userId: v.string(),
   },
   async handler(ctx, args) {

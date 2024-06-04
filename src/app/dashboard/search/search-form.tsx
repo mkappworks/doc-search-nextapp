@@ -41,7 +41,7 @@ export function SearchForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await searchAction({
       search: values.search,
-      orgId: organization?.id,
+      orgId: organization?.id ?? "personal",
     }).then(setResults);
     form.reset();
   }

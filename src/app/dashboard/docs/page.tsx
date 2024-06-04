@@ -14,7 +14,7 @@ import { UploadDocButton } from "@/app/dashboard/docs/upload-doc-button";
 export default function DocsPage() {
   const { organization } = useOrganization();
   const docs = useQuery(api.docs.getDocs, {
-    orgId: organization?.id,
+    orgId: organization?.id ?? "personal",
   });
 
   return (

@@ -8,7 +8,7 @@ import { embed } from "./notes";
 export const searchAction = action({
   args: {
     search: v.string(),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   handler: async (ctx, args) => {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;

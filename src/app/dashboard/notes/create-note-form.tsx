@@ -35,7 +35,10 @@ export function CreateNoteForm({ onCreate }: { onCreate: () => void }) {
   const { isSubmitting } = formState;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createNote({ text: values.note, orgId: organization?.id });
+    await createNote({
+      text: values.note,
+      orgId: organization?.id ?? "personal",
+    });
     onCreate();
   }
 

@@ -14,7 +14,7 @@ export default function NotePage() {
   const { noteId } = useParams<{ noteId: Id<"notes"> }>();
   const note = useQuery(api.notes.getNote, {
     noteId: noteId,
-    orgId: organization?.id,
+    orgId: organization?.id ?? "personal",
   });
 
   if (!note) return;

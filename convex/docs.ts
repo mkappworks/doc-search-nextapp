@@ -23,7 +23,7 @@ const openai = new OpenAI({
 async function hasAccessToDocument(
   ctx: MutationCtx | QueryCtx,
   docId: Id<"docs">,
-  orgId?: string,
+  orgId: string,
 ) {
   const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
   if (!userId) return null;
@@ -41,7 +41,7 @@ async function hasAccessToDocument(
 export const hasAccessToDocumentQuery = internalQuery({
   args: {
     docId: v.id("docs"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     return await hasAccessToDocument(ctx, args.docId, args.orgId);
@@ -50,7 +50,7 @@ export const hasAccessToDocumentQuery = internalQuery({
 
 export const getDocs = query({
   args: {
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -69,7 +69,7 @@ export const getDocs = query({
 export const getDoc = query({
   args: {
     docId: v.id("docs"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const accessObject = await hasAccessToDocument(ctx, args.docId, args.orgId);
@@ -85,7 +85,7 @@ export const createDoc = mutation({
   args: {
     title: v.string(),
     storageId: v.id("_storage"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -110,9 +110,10 @@ export const createDoc = mutation({
 export const deleteDoc = mutation({
   args: {
     docId: v.id("docs"),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
-    const accessObject = await hasAccessToDocument(ctx, args.docId);
+    const accessObject = await hasAccessToDocument(ctx, args.docId, args.orgId);
     if (!accessObject)
       throw new ConvexError("You do not have access to this Doc");
 
@@ -183,7 +184,7 @@ export const askQuestion = action({
   args: {
     question: v.string(),
     docId: v.id("docs"),
-    orgId: v.optional(v.string()),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const accessObject = await ctx.runQuery(
