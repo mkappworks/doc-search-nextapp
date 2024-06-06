@@ -5,7 +5,7 @@ import { SignInButton } from "@clerk/nextjs";
 
 export default function LandingPage() {
   return (
-    <div className="bg-slate-200 dark:bg-slate-950 h-screen">
+    <div className="h-screen bg-slate-200 dark:bg-slate-950">
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -26,12 +26,12 @@ export default function LandingPage() {
               width="200"
               height="200"
               alt="doc search"
-              className="mx-auto rounded-2xl mb-4"
+              className="mx-auto mb-4 rounded-2xl"
             />
-            <h1 className="dark:text-gray-50 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-50 sm:text-6xl">
               Take Control of you Team Documentation
             </h1>
-            <p className="dark:text-gray-100 mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-100">
               DocSearch acts as your team&apos;s second brain, storing all your
               docs and allowing easy vector search.
             </p>
